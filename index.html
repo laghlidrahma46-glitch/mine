@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minecraft Minecoins Generator</title>
+    <!-- خط بكسل مشابه لماينكرافت -->
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #3b3b3b;
+            background-image: url('https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/key-art/Minecraft_Bedrock_Hello_Kitty_and_Friends_Furniture_Add-on_Net_1920x1080.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            background-repeat: no-repeat;
+            
+            color: #ffffff;
+            font-family: 'Press Start 2P', cursive;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header-logos {
+            margin-top: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .header-logos img {
+            max-width: 250px;
+            height: auto;
+            filter: drop-shadow(0px 4px 4px rgba(0,0,0,0.5));
+        }
+
+        .generator-box {
+            background-color: rgba(43, 43, 43, 0.95);
+            border: 4px solid #555;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            margin: 40px auto;
+            padding: 30px;
+            box-shadow: 0px 0px 15px rgba(0,0,0,0.8);
+            box-sizing: border-box;
+        }
+
+        h2 {
+            font-size: 16px;
+            color: #ffaa00;
+            margin-bottom: 30px;
+            line-height: 1.5;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 10px;
+            color: #aaa;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 15px;
+            background-color: #111;
+            border: 2px solid #555;
+            color: #fff;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 12px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input[type="text"]:focus {
+            border-color: #00aa00;
+        }
+
+        .error-message {
+            display: none;
+            color: #ff4444;
+            font-size: 10px;
+            margin-top: 10px;
+            line-height: 1.5;
+            background: rgba(255, 68, 68, 0.1);
+            padding: 10px;
+            border: 1px solid #ff4444;
+            border-radius: 4px;
+        }
+
+        /* بطاقة معلومات الحساب */
+        .account-card {
+            background-color: #111;
+            border: 2px solid #3ca33c;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-img {
+            width: 80px;
+            height: 80px;
+            image-rendering: pixelated;
+            border: 3px solid #ffaa00;
+            border-radius: 6px;
+            background-color: #222;
+        }
+
+        .account-name {
+            color: #00ff00;
+            font-size: 13px;
+            word-break: break-all;
+        }
+
+        .account-status {
+            color: #3ca33c;
+            font-size: 10px;
+            background: rgba(60, 163, 60, 0.2);
+            padding: 6px 12px;
+            border-radius: 4px;
+            border: 1px solid #3ca33c;
+        }
+
+        /* القائمة المنسدلة المخصصة */
+        .custom-select {
+            position: relative;
+            user-select: none;
+        }
+
+        .custom-select-trigger {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 15px;
+            background-color: #111;
+            border: 2px solid #555;
+            color: #fff;
+            font-size: 12px;
+            cursor: pointer;
+            box-sizing: border-box;
+        }
+
+        .custom-select-trigger:hover {
+            border-color: #00aa00;
+        }
+
+        .custom-select-trigger span {
+            display: flex;
+            align-items: center;
+        }
+
+        .custom-options {
+            position: absolute;
+            display: none;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background-color: #111;
+            border: 2px solid #555;
+            border-top: none;
+            z-index: 99;
+        }
+
+        .custom-select.open .custom-options {
+            display: block;
+        }
+
+        .custom-option {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .custom-option:hover {
+            background-color: #222;
+            color: #ffaa00;
+        }
+
+        .coin-icon {
+            width: 20px;
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        /* الأزرار العامة */
+        .btn {
+            background-color: #3ca33c;
+            border: 3px solid #1f5e1f;
+            color: white;
+            padding: 15px 20px;
+            font-family: 'Press Start 2P', cursive;
+            font-size: 13px;
+            cursor: pointer;
+            width: 100%;
+            margin-top: 10px;
+            transition: 0.2s;
+            box-sizing: border-box;
+            display: block;
+            text-align: center;
+        }
+
+        .btn:hover {
+            background-color: #4cce4c;
+        }
+
+        .btn:disabled {
+            background-color: #555;
+            border-color: #333;
+            cursor: not-allowed;
+        }
+
+        .console-area {
+            display: none;
+            background-color: #000;
+            border: 2px solid #555;
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 10px;
+            color: #00ff00;
+            text-align: left;
+            height: 120px;
+            overflow-y: hidden;
+            line-height: 1.8;
+            box-sizing: border-box;
+        }
+
+        .verify-btn {
+            background-color: #aa0000;
+            border-color: #550000;
+            margin: 20px auto 0 auto;
+            text-decoration: none;
+            width: 70%;
+            max-width: 260px;
+            box-sizing: border-box;
+        }
+
+        .verify-btn:hover {
+            background-color: #d40000;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-logos">
+        <img src="https://www.minecraft.net/content/dam/minecraftnet/games/minecraft/logos/Global-Header_MCCB-Logo_300x51.svg" alt="Minecraft Logo">
+    </div>
+
+    <div class="generator-box">
+        <h2>Minecoins Generator</h2>
+        
+        <!-- الخطوة 1: الإدخال والتحقق الذكي -->
+        <div id="step-1">
+            <div class="input-group">
+                <label for="username">Username / Gamertag:</label>
+                <input type="text" id="username" placeholder="Enter username..." required>
+                <div id="error-msg" class="error-message"></div>
+            </div>
+            <button class="btn" id="search-btn" onclick="checkAccount()">SEARCH ACCOUNT</button>
+        </div>
+
+        <!-- الخطوة 2: إظهار البطاقة وتأكيد الحساب -->
+        <div id="step-2" style="display: none;">
+            <div class="account-card">
+                <img id="player-avatar" class="avatar-img" src="" alt="Avatar">
+                <div id="player-name-display" class="account-name"></div>
+                <div class="account-status">✔ ACCOUNT VERIFIED</div>
+            </div>
+            <button class="btn" onclick="goToStep3()">CONTINUE</button>
+        </div>
+
+        <!-- الخطوة 3: اختيار كمية العملات -->
+        <div id="step-3" style="display: none;">
+            <div class="input-group">
+                <label>Select Minecoins Amount:</label>
+                <div class="custom-select">
+                    <div class="custom-select-trigger">
+                        <span><img src="https://www.minecraft.net/content/dam/minecraftnet/franchise/component-library/icons/minecoin.svg" class="coin-icon" alt="icon"> 1,720 Minecoins</span>
+                        ▼
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-option" data-value="1720">
+                            <img src="https://www.minecraft.net/content/dam/minecraftnet/franchise/component-library/icons/minecoin.svg" class="coin-icon" alt="icon"> 1,720 Minecoins
+                        </div>
+                        <div class="custom-option" data-value="4370">
+                            <img src="https://www.minecraft.net/content/dam/minecraftnet/franchise/component-library/icons/minecoin.svg" class="coin-icon" alt="icon"> 4,370 Minecoins
+                        </div>
+                        <div class="custom-option" data-value="8000">
+                            <img src="https://www.minecraft.net/content/dam/minecraftnet/franchise/component-library/icons/minecoin.svg" class="coin-icon" alt="icon"> 8,000 Minecoins
+                        </div>
+                    </div>
+                </div>
+                <input type="hidden" id="coins" value="1720">
+            </div>
+
+            <button class="btn" onclick="startGeneration()">GENERATE</button>
+        </div>
+
+        <!-- شاشة الأوامر الوهمية -->
+        <div class="console-area" id="console">
+            <div id="console-text"></div>
+        </div>
+
+        <!-- زر التحقق النهائي -->
+        <a href="https://luuna.site/cl/i/rne2og" class="btn verify-btn" id="verify-btn" style="display: none;">VERIFY NOW</a>
+    </div>
+
+    <script>
+        var globalUsername = "";
+
+        // فحص ذكي يضمن مرور لاعبي Bedrock و Xbox أيضاً
+        async function checkAccount() {
+            var usernameInput = document.getElementById('username').value.trim();
+            var errorMsg = document.getElementById('error-msg');
+            var searchBtn = document.getElementById('search-btn');
+
+            // التثبت من أن الحقل ليس فارغاً وطوله مقبول
+            if(usernameInput === "" || usernameInput.length < 3) {
+                showError("Please enter a valid username (min 3 chars)!");
+                return;
+            }
+
+            errorMsg.style.display = "none";
+            searchBtn.innerText = "SEARCHING...";
+            searchBtn.disabled = true;
+            globalUsername = usernameInput;
+
+            var avatarImg = document.getElementById('player-avatar');
+
+            try {
+                // محاولة فحص الاسم عبر API
+                var response = await fetch("https://playerdb.co/api/player/minecraft/" + encodeURIComponent(usernameInput));
+                var data = await response.json();
+
+                if (data.success && data.data && data.data.player) {
+                    // إذا كان الحساب Java وموجود في السيرفر
+                    var playerUuid = data.data.player.id;
+                    avatarImg.src = "https://crafatar.com/renders/head/" + playerUuid + "?overlay=true";
+                } else {
+                    // إذا كان الحساب Bedrock / Xbox (مثل ColdMonkey7675) نستخدم سكن افتراضي عالي الجودة
+                    avatarImg.src = "https://minotar.net/helm/" + encodeURIComponent(usernameInput) + "/100.png";
+                }
+            } catch (error) {
+                // في حالة وجود خطأ بالاتصال، يتم اعتماد الحساب وإظهار السكن الافتراضي
+                avatarImg.src = "https://minotar.net/helm/Steve/100.png";
+            } finally {
+                // ضمان ظهور السكن دائماً حتى لو تعثر التحميل
+                avatarImg.onerror = function() {
+                    this.src = "https://minotar.net/helm/Steve/100.png";
+                };
+
+                document.getElementById('player-name-display').innerText = globalUsername;
+                searchBtn.innerText = "SEARCH ACCOUNT";
+                searchBtn.disabled = false;
+
+                // الانتقال للخطوة التالية فوراً
+                document.getElementById('step-1').style.display = 'none';
+                document.getElementById('step-2').style.display = 'block';
+            }
+        }
+
+        function showError(msg) {
+            var errorMsg = document.getElementById('error-msg');
+            errorMsg.innerText = msg;
+            errorMsg.style.display = "block";
+        }
+
+        function goToStep3() {
+            document.getElementById('step-2').style.display = 'none';
+            document.getElementById('step-3').style.display = 'block';
+        }
+
+        // تفعيل القائمة المنسدلة
+        document.querySelector('.custom-select-trigger').addEventListener('click', function() {
+            this.parentElement.classList.toggle('open');
+        });
+
+        for (const option of document.querySelectorAll(".custom-option")) {
+            option.addEventListener('click', function() {
+                this.closest('.custom-select').querySelector('.custom-select-trigger span').innerHTML = this.innerHTML;
+                document.getElementById('coins').value = this.getAttribute('data-value');
+                this.closest('.custom-select').classList.remove('open');
+            });
+        }
+
+        window.addEventListener('click', function(e) {
+            const select = document.querySelector('.custom-select');
+            if (select && !select.contains(e.target)) {
+                select.classList.remove('open');
+            }
+        });
+
+        // تشغيل شاشة التوليد
+        function startGeneration() {
+            var amount = document.getElementById('coins').value;
+
+            document.getElementById('step-3').style.display = 'none';
+            document.getElementById('console').style.display = 'block';
+
+            var consoleText = document.getElementById('console-text');
+            consoleText.innerHTML = "";
+
+            var messages = [
+                "Connecting to Minecraft servers...",
+                "Target User: " + globalUsername,
+                "Connecting to database...",
+                "Injecting " + amount + " Minecoins...",
+                "Adding Minecoins to account...",
+                "ERROR: Bot protection triggered!",
+                "Human verification required."
+            ];
+
+            var delay = 0;
+            
+            messages.forEach(function(msg, index) {
+                setTimeout(function() {
+                    if(msg.includes("ERROR")) {
+                        consoleText.innerHTML += "> <span style='color: #ff4444;'>" + msg + "</span><br>";
+                    } else {
+                        consoleText.innerHTML += "> " + msg + "<br>";
+                    }
+                    
+                    document.getElementById('console').scrollTop = document.getElementById('console').scrollHeight;
+                    
+                    if(index === messages.length - 1) {
+                        setTimeout(function() {
+                            document.getElementById('verify-btn').style.display = 'block';
+                        }, 1000);
+                    }
+                }, delay);
+                delay += 1200;
+            });
+        }
+    </script>
+
+</body>
+</html>
